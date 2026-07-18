@@ -7,4 +7,7 @@
    <FileRef
       location = "absolute:/Users/izone/Downloads/GoogleService-Info.plist">
    </FileRef>
+   <FileRef
+      location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
 </Workspace>
