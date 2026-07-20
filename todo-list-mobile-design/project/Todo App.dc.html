@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/nocturne-361ed1de-151a-4bcc-a8c8-f013dd156458/styles.css">
+  <script src="_ds/nocturne-361ed1de-151a-4bcc-a8c8-f013dd156458/_ds_bundle.js"></script>
+  <style>
+    body{margin:0}
+    .phone-scroll::-webkit-scrollbar{display:none}
+    .phone-scroll{scrollbar-width:none}
+  </style>
+</helmet>
+<div style="display:flex;justify-content:center;padding:56px 24px;background:var(--color-bg);min-height:100vh;box-sizing:border-box">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402,874">
+
+<div style="height:100%;display:flex;flex-direction:column;background:var(--color-bg);font-family:var(--font-body);color:var(--color-text);position:relative;overflow:hidden">
+
+  <div class="phone-scroll" style="flex:1;overflow:auto;padding-bottom:96px">
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <div style="padding:64px 20px 4px">
+          <div style="font-family:var(--font-heading);font-weight:500;font-size:28px;letter-spacing:-0.3px;color:var(--color-text)">Tasks</div>
+          <div style="font-size:13px;color:var(--color-neutral-300);margin-top:4px">{{ activeCount }} tasks left</div>
+        </div>
+
+        <div style="display:flex;gap:8px;overflow-x:auto;padding:14px 20px 4px" class="phone-scroll">
+          <sc-for list="{{ catCards }}" as="c" hint-placeholder-count="4">
+            <button onClick="{{ c.onClick }}" style="flex-shrink:0;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid var(--color-neutral-700);background:transparent;cursor:pointer;font-family:var(--font-body);font-size:12.5px;color:var(--color-neutral-200)" style-hover="border-color:var(--color-accent-500)">
+              <span style="width:7px;height:7px;border-radius:50%;background:var({{ c.colorVar }})"></span>
+              {{ c.name }}
+            </button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ hasAnyActive }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <sc-if value="{{ hasToday }}">
+              <div>
+                <div style="padding:18px 20px 8px;font-size:11.5px;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;color:var(--color-neutral-400)">Today</div>
+                <sc-for list="{{ todayTasks }}" as="t" hint-placeholder-count="2">
+                  <div style="position:relative;margin:0 16px 8px;border-radius:var(--radius-md);overflow:hidden">
+                    <div style="position:absolute;inset:0;display:flex;align-items:stretch;justify-content:space-between">
+                      <div style="flex:1;display:flex;align-items:center;padding-left:20px;background:var(--color-accent-800);color:var(--color-accent-100);font-size:13px;gap:6px;opacity:{{ t.revealDone }}">✓ Done</div>
+                      <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;padding-right:20px;background:var(--color-neutral-800);color:var(--color-neutral-200);font-size:13px;gap:6px;opacity:{{ t.revealDelete }}">Delete ✕</div>
+                    </div>
+                    <div onPointerDown="{{ t.onDown }}" onPointerMove="{{ t.onMove }}" onPointerUp="{{ t.onUp }}" onPointerLeave="{{ t.onUp }}" onClick="{{ t.onOpen }}" style="position:relative;display:flex;flex-direction:row;align-items:center;gap:12px;padding:14px 16px;background:var(--color-neutral-900);border-radius:var(--radius-md);transform:translateX({{ t.dragX }}px);cursor:pointer;touch-action:pan-y">
+                      <button onClick="{{ t.onToggle }}" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--color-accent-400);background:transparent;flex-shrink:0;cursor:pointer;padding:0"></button>
+                      <div style="flex:1;min-width:0">
+                        <div style="font-size:15px;color:var(--color-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.title }}</div>
+                        <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+                          <span style="width:6px;height:6px;border-radius:50%;background:var({{ t.cat.colorVar }})"></span>
+                          <span style="font-size:12px;color:var(--color-neutral-400)">{{ t.cat.name }} · {{ t.dueLabel }}</span>
+                        </div>
+                      </div>
+                      <svg width="7" height="12" viewBox="0 0 8 14" style="flex-shrink:0;opacity:0.5"><path d="M1 1l6 6-6 6" stroke="var(--color-neutral-300)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ hasTomorrow }}">
+              <div>
+                <div style="padding:18px 20px 8px;font-size:11.5px;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;color:var(--color-neutral-400)">Tomorrow</div>
+                <sc-for list="{{ tomorrowTasks }}" as="t" hint-placeholder-count="2">
+                  <div style="position:relative;margin:0 16px 8px;border-radius:var(--radius-md);overflow:hidden">
+                    <div style="position:absolute;inset:0;display:flex;align-items:stretch;justify-content:space-between">
+                      <div style="flex:1;display:flex;align-items:center;padding-left:20px;background:var(--color-accent-800);color:var(--color-accent-100);font-size:13px;gap:6px;opacity:{{ t.revealDone }}">✓ Done</div>
+                      <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;padding-right:20px;background:var(--color-neutral-800);color:var(--color-neutral-200);font-size:13px;gap:6px;opacity:{{ t.revealDelete }}">Delete ✕</div>
+                    </div>
+                    <div onPointerDown="{{ t.onDown }}" onPointerMove="{{ t.onMove }}" onPointerUp="{{ t.onUp }}" onPointerLeave="{{ t.onUp }}" onClick="{{ t.onOpen }}" style="position:relative;display:flex;flex-direction:row;align-items:center;gap:12px;padding:14px 16px;background:var(--color-neutral-900);border-radius:var(--radius-md);transform:translateX({{ t.dragX }}px);cursor:pointer;touch-action:pan-y">
+                      <button onClick="{{ t.onToggle }}" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--color-accent-400);background:transparent;flex-shrink:0;cursor:pointer;padding:0"></button>
+                      <div style="flex:1;min-width:0">
+                        <div style="font-size:15px;color:var(--color-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.title }}</div>
+                        <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+                          <span style="width:6px;height:6px;border-radius:50%;background:var({{ t.cat.colorVar }})"></span>
+                          <span style="font-size:12px;color:var(--color-neutral-400)">{{ t.cat.name }} · {{ t.dueLabel }}</span>
+                        </div>
+                      </div>
+                      <svg width="7" height="12" viewBox="0 0 8 14" style="flex-shrink:0;opacity:0.5"><path d="M1 1l6 6-6 6" stroke="var(--color-neutral-300)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ hasUpcoming }}">
+              <div>
+                <div style="padding:18px 20px 8px;font-size:11.5px;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;color:var(--color-neutral-400)">Upcoming</div>
+                <sc-for list="{{ upcomingTasks }}" as="t" hint-placeholder-count="2">
+                  <div style="position:relative;margin:0 16px 8px;border-radius:var(--radius-md);overflow:hidden">
+                    <div style="position:absolute;inset:0;display:flex;align-items:stretch;justify-content:space-between">
+                      <div style="flex:1;display:flex;align-items:center;padding-left:20px;background:var(--color-accent-800);color:var(--color-accent-100);font-size:13px;gap:6px;opacity:{{ t.revealDone }}">✓ Done</div>
+                      <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;padding-right:20px;background:var(--color-neutral-800);color:var(--color-neutral-200);font-size:13px;gap:6px;opacity:{{ t.revealDelete }}">Delete ✕</div>
+                    </div>
+                    <div onPointerDown="{{ t.onDown }}" onPointerMove="{{ t.onMove }}" onPointerUp="{{ t.onUp }}" onPointerLeave="{{ t.onUp }}" onClick="{{ t.onOpen }}" style="position:relative;display:flex;flex-direction:row;align-items:center;gap:12px;padding:14px 16px;background:var(--color-neutral-900);border-radius:var(--radius-md);transform:translateX({{ t.dragX }}px);cursor:pointer;touch-action:pan-y">
+                      <button onClick="{{ t.onToggle }}" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--color-accent-400);background:transparent;flex-shrink:0;cursor:pointer;padding:0"></button>
+                      <div style="flex:1;min-width:0">
+                        <div style="font-size:15px;color:var(--color-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.title }}</div>
+                        <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+                          <span style="width:6px;height:6px;border-radius:50%;background:var({{ t.cat.colorVar }})"></span>
+                          <span style="font-size:12px;color:var(--color-neutral-400)">{{ t.cat.name }} · {{ t.dueLabel }}</span>
+                        </div>
+                      </div>
+                      <svg width="7" height="12" viewBox="0 0 8 14" style="flex-shrink:0;opacity:0.5"><path d="M1 1l6 6-6 6" stroke="var(--color-neutral-300)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ hasAnyActive }}" hint-placeholder-val="{{ true }}">
+        </sc-if>
+        <sc-if value="{{ !hasAnyActive }}">
+          <div style="padding:60px 24px;text-align:center">
+            <div style="font-size:15px;color:var(--color-neutral-300)">All caught up.</div>
+            <div style="font-size:13px;color:var(--color-neutral-500);margin-top:4px">No tasks in this view.</div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCategories }}">
+      <div style="padding:64px 20px 4px">
+        <div style="font-family:var(--font-heading);font-weight:500;font-size:28px;letter-spacing:-0.3px;color:var(--color-text)">Categories</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:18px">
+          <sc-for list="{{ catCards }}" as="c" hint-placeholder-count="4">
+            <div onClick="{{ c.onClick }}" class="elev-sm" style="display:flex;flex-direction:row;align-items:center;gap:14px;padding:16px;cursor:pointer;background:var(--color-neutral-900);border-radius:var(--radius-md);border:1px solid {{ c.borderColor }}">
+              <span style="width:14px;height:14px;border-radius:50%;background:var({{ c.colorVar }});flex-shrink:0"></span>
+              <div style="flex:1">
+                <div style="font-size:15px;color:var(--color-text)">{{ c.name }}</div>
+                <div style="font-size:12.5px;color:var(--color-neutral-400);margin-top:2px">{{ c.count }} open</div>
+              </div>
+              <svg width="7" height="12" viewBox="0 0 8 14" style="opacity:0.5"><path d="M1 1l6 6-6 6" stroke="var(--color-neutral-300)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isArchive }}">
+      <div style="padding:64px 20px 4px">
+        <div style="font-family:var(--font-heading);font-weight:500;font-size:28px;letter-spacing:-0.3px;color:var(--color-text)">Archive</div>
+        <div style="font-size:13px;color:var(--color-neutral-300);margin-top:4px">{{ doneEnriched.length }} completed</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+          <sc-for list="{{ doneEnriched }}" as="t" hint-placeholder-count="2">
+            <div style="display:flex;flex-direction:row;align-items:center;gap:12px;padding:14px 16px;background:var(--color-neutral-900);border-radius:var(--radius-md)">
+              <span style="width:6px;height:6px;border-radius:50%;background:var({{ t.cat.colorVar }});flex-shrink:0"></span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:14.5px;color:var(--color-neutral-400);text-decoration:line-through">{{ t.title }}</div>
+                <div style="font-size:12px;color:var(--color-neutral-500);margin-top:2px">{{ t.cat.name }} · {{ t.completedLabel }}</div>
+              </div>
+              <button onClick="{{ t.onRestore }}" class="btn btn-ghost" style="padding:6px 10px;font-size:12px">Restore</button>
+            </div>
+          </sc-for>
+          <sc-if value="{{ !hasDone }}">
+            <div style="padding:40px 4px;text-align:center;font-size:14px;color:var(--color-neutral-400)">Nothing archived yet.</div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isDetail }}">
+      <div style="padding:16px 20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:44px 0 8px">
+          <button onClick="{{ backFromDetail }}" class="btn-icon" style="border:none;background:transparent;color:var(--color-text);cursor:pointer;font-size:20px">←</button>
+          <div style="display:flex;gap:8px">
+            <button onClick="{{ editSelected }}" class="btn btn-ghost" style="padding:6px 12px;font-size:13px">Edit</button>
+            <button onClick="{{ deleteSelected }}" class="btn btn-ghost" style="padding:6px 12px;font-size:13px">Delete</button>
+          </div>
+        </div>
+        <div style="margin-top:18px;display:flex;align-items:center;gap:8px">
+          <span class="tag tag-accent">{{ selectedCat.name }}</span>
+        </div>
+        <div style="font-family:var(--font-heading);font-weight:500;font-size:24px;margin-top:12px;color:var(--color-text)">{{ selectedTask.title }}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:16px;font-size:14px;color:var(--color-neutral-300)">
+          <span>📅 {{ selectedTask.dueLabel }}</span>
+        </div>
+        <sc-if value="{{ selectedTask.reminder }}">
+          <div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:14px;color:var(--color-neutral-300)">
+            <span>🔔 Reminder set</span>
+          </div>
+        </sc-if>
+        <div style="margin-top:20px;font-size:14px;line-height:1.6;color:var(--color-neutral-300)">{{ selectedTask.notes }}</div>
+        <button onClick="{{ toggleSelected }}" class="btn btn-primary btn-block" style="margin-top:28px">{{ toggleLabel }}</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isAdd }}">
+      <div style="padding:16px 20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:44px 0 8px">
+          <button onClick="{{ cancelAdd }}" class="btn-icon" style="border:none;background:transparent;color:var(--color-text);cursor:pointer;font-size:20px">←</button>
+          <div style="font-size:16px;color:var(--color-text)">{{ addTitle }}</div>
+          <button onClick="{{ saveDraft }}" disabled="{{ !canSave }}" style="border:none;background:transparent;color:var(--color-accent-300);font-size:15px;cursor:pointer">Save</button>
+        </div>
+
+        <div class="field" style="margin-top:16px">
+          <label>Title</label>
+          <input class="input" value="{{ draftTitle }}" onChange="{{ setTitle }}" placeholder="What needs doing?"></input>
+        </div>
+
+        <div style="margin-top:16px">
+          <label style="font-size:13px;color:var(--color-neutral-300)">Category</label>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <sc-for list="{{ draftCategoryOptions }}" as="c" hint-placeholder-count="4">
+              <button onClick="{{ c.onClick }}" style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid {{ c.borderColor }};background:{{ c.bg }};cursor:pointer;font-size:12.5px;color:var(--color-neutral-100)">
+                <span style="width:7px;height:7px;border-radius:50%;background:var({{ c.colorVar }})"></span>
+                {{ c.name }}
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:16px">
+          <label>Due</label>
+          <input class="input" value="{{ draftDueLabel }}" onChange="{{ setDue }}" placeholder="e.g. Today · 5:00 PM"></input>
+        </div>
+
+        <div style="margin-top:16px">
+          <label style="font-size:13px;color:var(--color-neutral-300)">Reminder</label>
+          <div class="seg" style="margin-top:8px">
+            <button class="seg-opt {{ reminderOffClass }}" onClick="{{ setReminderOff }}">Off</button>
+            <button class="seg-opt {{ reminderOnClass }}" onClick="{{ setReminderOn }}">On</button>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:16px">
+          <label>Notes</label>
+          <textarea class="input" rows="4" value="{{ draftNotes }}" onChange="{{ setNotes }}" placeholder="Add details…"></textarea>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <sc-if value="{{ showFab }}">
+    <button onClick="{{ openAddNew }}" style="position:absolute;right:20px;bottom:100px;width:56px;height:56px;border-radius:50%;background:var(--color-neutral-900);border:1.5px solid var(--color-accent-400);color:var(--color-accent-200);font-size:26px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 0 1px var(--color-accent-800), 0 4px 20px rgba(145,132,217,0.35)">+</button>
+  </sc-if>
+
+  <sc-if value="{{ showTabBar }}">
+    <div style="position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;align-items:center;height:78px;padding-bottom:18px;background:var(--color-neutral-900);border-top:1px solid var(--color-neutral-800)">
+      <button onClick="{{ goHome }}" style="border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ homeTabColor }};font-size:11px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 10.5L12 4l8 6.5V20a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4H10v4a1 1 0 01-1 1H5a1 1 0 01-1-1V10.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path></svg>
+        Tasks
+      </button>
+      <button onClick="{{ goCategories }}" style="border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ catTabColor }};font-size:11px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M11 4H6a2 2 0 00-2 2v5l9.5 9.5a2 2 0 002.8 0l5.2-5.2a2 2 0 000-2.8L12 4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path><circle cx="8" cy="9" r="1.4" fill="currentColor"></circle></svg>
+        Categories
+      </button>
+      <button onClick="{{ goArchive }}" style="border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ archiveTabColor }};font-size:11px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="4" rx="1" stroke="currentColor" stroke-width="1.6"></rect><path d="M4.5 9.5V17a2 2 0 002 2h11a2 2 0 002-2V9.5" stroke="currentColor" stroke-width="1.6"></path><path d="M10 13h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+        Archive
+      </button>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;initialScreen&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;home&quot;, &quot;options&quot;: [&quot;home&quot;, &quot;categories&quot;, &quot;archive&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot;}, &quot;compactRows&quot;: {&quot;editor&quot;: null, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;}}">
+class Component extends DCLogic {
+  categories = [
+    { id: 'work', name: 'Work', colorVar: '--color-accent-500' },
+    { id: 'personal', name: 'Personal', colorVar: '--color-accent-300' },
+    { id: 'home', name: 'Home', colorVar: '--color-neutral-400' },
+    { id: 'health', name: 'Health', colorVar: '--color-accent-700' },
+  ];
+
+  state = {
+    screen: 'home',
+    filterCategory: null,
+    selectedTaskId: null,
+    editingId: null,
+    swipeId: null,
+    swipeX: 0,
+    draft: { title: '', categoryId: 'work', dueLabel: '', reminder: false, notes: '' },
+    tasks: [
+      { id: 't1', title: 'Finalize Q3 roadmap deck', categoryId: 'work', group: 'today', dueLabel: 'Today · 10:00 AM', reminder: true, notes: 'Pull numbers from the July report before the review.', done: false },
+      { id: 't2', title: 'Call dentist to reschedule', categoryId: 'health', group: 'today', dueLabel: 'Today · 3:30 PM', reminder: true, notes: 'Ask about the Thursday morning slot.', done: false },
+      { id: 't3', title: 'Pick up dry cleaning', categoryId: 'home', group: 'today', dueLabel: 'Today · 6:00 PM', reminder: false, notes: '', done: false },
+      { id: 't4', title: 'Review pull request #482', categoryId: 'work', group: 'today', dueLabel: 'Today · 11:30 AM', reminder: false, notes: 'Focus on the migration script.', done: false },
+      { id: 't5', title: 'Morning run', categoryId: 'health', group: 'tomorrow', dueLabel: 'Tomorrow · 7:00 AM', reminder: true, notes: '5K loop around the park.', done: false },
+      { id: 't6', title: 'Grocery shopping', categoryId: 'home', group: 'tomorrow', dueLabel: 'Tomorrow · 5:00 PM', reminder: false, notes: 'Milk, eggs, coffee.', done: false },
+      { id: 't7', title: 'Plan weekend trip', categoryId: 'personal', group: 'upcoming', dueLabel: 'Tue, Jul 21', reminder: false, notes: 'Look at cabins near the lake.', done: false },
+      { id: 't8', title: 'Read Deep Work, chapter 4', categoryId: 'personal', group: 'upcoming', dueLabel: 'Thu, Jul 23', reminder: false, notes: '', done: false },
+      { id: 't9', title: 'Pay electricity bill', categoryId: 'home', group: 'today', dueLabel: 'Jul 16', reminder: false, notes: '', done: true, completedLabel: '2 days ago' },
+      { id: 't10', title: 'Renew gym membership', categoryId: 'health', group: 'today', dueLabel: 'Jul 15', reminder: false, notes: '', done: true, completedLabel: '3 days ago' },
+    ],
+  };
+
+  constructor(props) {
+    super(props);
+    this.state.screen = props.initialScreen || this.state.screen;
+  }
+
+  goto(screen) { this.setState({ screen }); }
+  openDetail(id) { this.setState({ selectedTaskId: id, screen: 'detail' }); }
+  openAddNew() { this.setState({ editingId: null, draft: { title: '', categoryId: 'work', dueLabel: '', reminder: false, notes: '' }, screen: 'add' }); }
+  openEdit(id) {
+    const t = this.state.tasks.find(t => t.id === id);
+    if (!t) return;
+    this.setState({ editingId: id, draft: { title: t.title, categoryId: t.categoryId, dueLabel: t.dueLabel, reminder: t.reminder, notes: t.notes || '' }, screen: 'add' });
+  }
+  updateDraft(field, val) { this.setState(s => ({ draft: { ...s.draft, [field]: val } })); }
+  saveDraft() {
+    this.setState(s => {
+      let tasks;
+      if (s.editingId) {
+        tasks = s.tasks.map(t => t.id === s.editingId ? { ...t, ...s.draft } : t);
+      } else {
+        tasks = [...s.tasks, { id: 't' + Date.now(), ...s.draft, group: 'today', done: false }];
+      }
+      return { tasks, screen: 'home' };
+    });
+  }
+  toggleDone(id) {
+    this.setState(s => ({
+      swipeId: null, swipeX: 0,
+      tasks: s.tasks.map(t => t.id === id ? { ...t, done: !t.done, completedLabel: !t.done ? 'Just now' : t.completedLabel } : t),
+    }));
+  }
+  deleteTask(id) {
+    this.setState(s => ({
+      swipeId: null, swipeX: 0,
+      tasks: s.tasks.filter(t => t.id !== id),
+      screen: s.screen === 'detail' ? 'home' : s.screen,
+    }));
+  }
+  setFilter(catId) { this.setState(s => ({ filterCategory: s.filterCategory === catId ? null : catId, screen: 'home' })); }
+
+  onRowDown(id, e) { this._dragStart = e.clientX; this.setState({ swipeId: id, swipeX: 0 }); }
+  onRowMove(id, e) {
+    if (this.state.swipeId !== id || this._dragStart == null) return;
+    let dx = e.clientX - this._dragStart;
+    dx = Math.max(-90, Math.min(90, dx));
+    this.setState({ swipeX: dx });
+  }
+  onRowUp(id) {
+    if (this.state.swipeId !== id) return;
+    const dx = this.state.swipeX;
+    this._dragStart = null;
+    if (dx < -60) this.deleteTask(id);
+    else if (dx > 60) this.toggleDone(id);
+    else this.setState({ swipeId: null, swipeX: 0 });
+  }
+
+  renderVals() {
+    const { tasks, screen, filterCategory, swipeId, swipeX, selectedTaskId, draft, editingId } = this.state;
+    const categories = this.categories;
+    const catById = id => categories.find(c => c.id === id) || categories[0];
+    const visibleTasks = filterCategory ? tasks.filter(t => t.categoryId === filterCategory) : tasks;
+    const active = visibleTasks.filter(t => !t.done);
+    const done = tasks.filter(t => t.done);
+
+    const enrich = t => ({
+      ...t,
+      cat: catById(t.categoryId),
+      dragX: swipeId === t.id ? swipeX : 0,
+      revealDone: swipeId === t.id && swipeX > 15 ? 1 : 0,
+      revealDelete: swipeId === t.id && swipeX < -15 ? 1 : 0,
+      onDown: (e) => this.onRowDown(t.id, e),
+      onMove: (e) => this.onRowMove(t.id, e),
+      onUp: () => this.onRowUp(t.id),
+      onOpen: () => this.openDetail(t.id),
+      onToggle: (e) => { e.stopPropagation(); this.toggleDone(t.id); },
+    });
+
+    const todayTasks = active.filter(t => t.group === 'today').map(enrich);
+    const tomorrowTasks = active.filter(t => t.group === 'tomorrow').map(enrich);
+    const upcomingTasks = active.filter(t => t.group === 'upcoming').map(enrich);
+    const doneEnriched = done.map(t => ({ ...t, cat: catById(t.categoryId), onRestore: () => this.toggleDone(t.id), onDelete: () => this.deleteTask(t.id) }));
+    const catCards = categories.map(c => ({
+      ...c,
+      count: tasks.filter(t => t.categoryId === c.id && !t.done).length,
+      active: filterCategory === c.id,
+      borderColor: filterCategory === c.id ? 'var(--color-accent-500)' : 'var(--color-neutral-800)',
+      onClick: () => this.setFilter(c.id),
+    }));
+    const draftCategoryOptions = categories.map(c => ({
+      ...c,
+      selected: c.id === draft.categoryId,
+      borderColor: c.id === draft.categoryId ? 'var(--color-accent-500)' : 'var(--color-neutral-700)',
+      bg: c.id === draft.categoryId ? 'var(--color-accent-900)' : 'transparent',
+      onClick: () => this.updateDraft('categoryId', c.id),
+    }));
+
+    const selectedTask = tasks.find(t => t.id === selectedTaskId) || null;
+    const selectedCat = selectedTask ? catById(selectedTask.categoryId) : { name: '' };
+
+    return {
+      isHome: screen === 'home', isCategories: screen === 'categories', isArchive: screen === 'archive', isDetail: screen === 'detail', isAdd: screen === 'add',
+      showTabBar: screen === 'home' || screen === 'categories' || screen === 'archive',
+      showFab: screen === 'home',
+      activeCount: active.length,
+      todayTasks, tomorrowTasks, upcomingTasks,
+      hasToday: todayTasks.length > 0, hasTomorrow: tomorrowTasks.length > 0, hasUpcoming: upcomingTasks.length > 0,
+      hasAnyActive: active.length > 0,
+      catCards, doneEnriched, hasDone: doneEnriched.length > 0,
+      goHome: () => this.goto('home'), goCategories: () => this.goto('categories'), goArchive: () => this.goto('archive'),
+      homeTabColor: screen === 'home' ? 'var(--color-accent-300)' : 'var(--color-neutral-400)',
+      catTabColor: screen === 'categories' ? 'var(--color-accent-300)' : 'var(--color-neutral-400)',
+      archiveTabColor: screen === 'archive' ? 'var(--color-accent-300)' : 'var(--color-neutral-400)',
+      openAddNew: () => this.openAddNew(),
+      selectedTask: selectedTask || { title: '', dueLabel: '', notes: '', reminder: false },
+      selectedCat,
+      toggleLabel: selectedTask && selectedTask.done ? 'Mark as not done' : 'Mark complete',
+      backFromDetail: () => this.setState({ screen: 'home' }),
+      editSelected: () => this.openEdit(selectedTaskId),
+      deleteSelected: () => this.deleteTask(selectedTaskId),
+      toggleSelected: () => this.toggleDone(selectedTaskId),
+      draftTitle: draft.title, draftNotes: draft.notes, draftDueLabel: draft.dueLabel, draftReminder: draft.reminder,
+      setTitle: (e) => this.updateDraft('title', e.target.value),
+      setNotes: (e) => this.updateDraft('notes', e.target.value),
+      setDue: (e) => this.updateDraft('dueLabel', e.target.value),
+      setReminderOn: () => this.updateDraft('reminder', true),
+      setReminderOff: () => this.updateDraft('reminder', false),
+      reminderOnClass: draft.reminder ? 'active' : '',
+      reminderOffClass: !draft.reminder ? 'active' : '',
+      saveDraft: () => this.saveDraft(),
+      cancelAdd: () => this.setState({ screen: editingId ? 'detail' : 'home' }),
+      addTitle: editingId ? 'Edit Task' : 'New Task',
+      canSave: draft.title.trim().length > 0,
+      draftCategoryOptions,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

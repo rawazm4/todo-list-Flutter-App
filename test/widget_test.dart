@@ -1,32 +1,22 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:todolist/data/repositories/auth_repository.dart';
-import 'package:todolist/presentation/auth/sign_in_view.dart';
-
-class _FakeAuthRepository implements AuthRepository {
-  @override
-  Stream<User?> get authStateChanges => const Stream.empty();
-
-  @override
-  User? get currentUser => null;
-
-  @override
-  Future<User?> signInWithGoogle() async => null;
-
-  @override
-  Future<void> signOut() async {}
-}
+import 'package:todolist/core/theme/app_theme.dart';
+import 'package:todolist/presentation/todo_list/todo_list_view.dart';
 
 void main() {
-  testWidgets('SignInView shows welcome message and sign-in button',
-      (WidgetTester tester) async {
+  testWidgets('TodoListView shows the seeded tasks grouped by section', (
+    tester,
+  ) async {
     await tester.pumpWidget(
-      MaterialApp(home: SignInView(authRepository: _FakeAuthRepository())),
+      ProviderScope(
+        child: MaterialApp(theme: AppTheme.dark, home: const TodoListView()),
+      ),
     );
 
-    expect(find.text('Welcome to Todolist'), findsOneWidget);
-    expect(find.text('Sign in with Google'), findsOneWidget);
+    expect(find.text('Tasks'), findsOneWidget);
+    expect(find.text('TODAY'), findsOneWidget);
+    expect(find.text('Finalize Q3 roadmap deck'), findsOneWidget);
   });
 }
